@@ -3,7 +3,7 @@ import './assets/main.css'
 import { createApp } from 'vue'
 import App from './App.vue'
 import { initializeApp } from 'firebase/app'
-import { getAuth } from 'firebase/auth'
+import { getAuth, connectAuthEmulator } from 'firebase/auth'
 
 // these are local dev only - do not use in production
 const firebaseConfig = {
@@ -17,9 +17,7 @@ const firebaseConfig = {
 
 const firebaseApp = initializeApp(firebaseConfig)
 if (window.location.hostname === 'localhost') {
-  import('firebase/auth').then(({ connectAuthEmulator }) => {
-    connectAuthEmulator(getAuth(firebaseApp), 'http://localhost:9099');
-  });
+  connectAuthEmulator(getAuth(firebaseApp), 'http://localhost:9099');
 }
 const auth = getAuth(firebaseApp)
 const app = createApp(App)

@@ -1,21 +1,4 @@
 <script setup>
-import Auth from './Auth.vue'
-import {ref, onMounted} from 'vue';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
-
-const isAuthenticated = ref(false);
-
-onMounted(() => {
-  const auth = getAuth();
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      isAuthenticated.value = true;
-    } else {
-      isAuthenticated.value = false;
-    }
-  });
-});
-
 
 defineProps({
   msg: {

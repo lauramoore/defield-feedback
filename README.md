@@ -1,25 +1,8 @@
-# defield-starter-app
+# defield-feedback
 
-This template should help get you started developing with Vue 3 in Vite integrated with firebase for authentication.
-You will need a firebase emulator project to provide authentication backend running locally on your machine.
+Vue application for collecting feedback on DE field experience.  Feeds to a firebase document database and addtional cloud functions provide for data analysis.
 
-For details on installing and configuring firebase emulators (https://firebase.google.com/docs/emulator-suite/install_and_configure)
-When you are contributing a defield UI  the defield-functions project provides all the specfic actions and tables used in the real app.
-
-This is a Vue3 application when googling/chatGPT for guidance be sure to filter for Vue3 suggestions.
-
-
-When setup correctly,  your initial home view will include the option to login and when emulators are setup correctly then you
-will be able to login and the view will indicate your new login state.
-
-Understand the nature of the firebase state interaction with callbacks on the view lifecycles
-
-In HelloWorld.vue the onAuthenticationState change fires when login or logout is completed with the emulator.
-
-Auth.vue wraps firebaseui as a vue component, the UI provides all the neccesary interactions with firebase to register and login new users.  Each application will allow for different login options.
-
-Before deploying a live app, the credentials will be replaced with environment variables and served from .env files so that application Ids, auth tokens are never checked into source control.
-
+**Important** This app is client of the defield-firebase backend application, clone that and run it in emulator mode for local development.  This application relies on functions to create the feedback documents correctly and securely (validation and rulesnpm )
 
 ## Recommended IDE Setup
 
