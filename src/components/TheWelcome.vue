@@ -1,15 +1,22 @@
 <script setup>
+import { shallowRef } from 'vue';
 import WelcomeItem from './WelcomeItem.vue';
+import KudosForm from './KudosForm.vue';
+import ProblemForm from './ProblemForm.vue';
+
+const currentView = shallowRef(null);
+
 const showKudosForm = () => {
-  alert("kudos!");
+  currentView.value = KudosForm;
 }
 const showProblemForm = () => {
-  alert("Problem !!")
+  currentView.value = ProblemForm;
 }
 </script>
 
 <template>
-<div>
+<component :is="currentView" v-if="currentView" />
+<div v-else>
   <h1>Welcome to Feedback Portal</h1>
   <p>Choose an option below to get started:</p>
   <WelcomeItem @click="showKudosForm">
