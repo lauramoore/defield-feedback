@@ -5,8 +5,7 @@
 </template>
 
 <script setup>
-import { defineEmits } from 'vue';
-
+/* note that defineEmits is a vue compiler macro */
 const emit = defineEmits(['click']);
 
 const handleClick = () => {
@@ -30,6 +29,11 @@ const handleClick = () => {
     transition: background-color 0.3s ease;
   }
 </style>
+/*
+ This Widget renders a button with a defined style. It works by accepting the button label
+ as a slot provided by the parent component, actions will be tied to it in the parent component
+ with a click handler which is why this item emits click event
+ */
 
 
 
