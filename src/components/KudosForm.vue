@@ -3,10 +3,6 @@
     <h2>Give Kudos</h2>
     <form @submit.prevent="submitKudos">
       <div class="form-group">
-        <label for="teamNumber">Your Team:</label>
-        <input id="teamNumber" v-model="teamNumber" type="number" maxlength="6" required>
-      </div>
-      <div class="form-group">
         <label for="session-id">DE Session</label>
         <input id="session-id" type="text" v-model="sessionId">
       </div>
@@ -22,20 +18,19 @@
 
 <script setup>
 import { ref, inject } from 'vue';
-import { httpsCallable } from 'firebase/functions';
+import {getTeam} from './AppData';
+
 
 const kudosMessage = ref('');
-const teamNumber = ref('0000');
 const sessionId = ref('');
-const functions = inject('$functions');
+const callable = inject('$submit');
 const emit = defineEmits(['submit', 'cancel']);
 
 const submitKudos = async () => {
   try {
-    const submit = httpsCallable(functions, 'submitFeedback');
-    const result = await submit({
+    const result = await callable({
       feedback: kudosMessage.value,
-      teamNumber: teamNumber.value,
+      teamNumber: getTeam().value,
       sessionId: sessionId.value
     });
 

@@ -4,7 +4,8 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import { initializeApp } from 'firebase/app'
 import { getAuth, connectAuthEmulator } from 'firebase/auth'
-import { getFunctions, connectFunctionsEmulator } from 'firebase/functions'
+import { getFunctions, connectFunctionsEmulator, httpsCallable } from 'firebase/functions'
+import { connectFirestoreEmulator, getFirestore } from 'firebase/firestore'
 
 // these are local dev only - do not use in production
 const firebaseConfig = {
@@ -18,13 +19,18 @@ const firebaseConfig = {
 
 const firebaseApp = initializeApp(firebaseConfig)
 const functions = getFunctions(firebaseApp)
+const db = getFirestore(firebaseApp)
 if (window.location.hostname === 'localhost') {
   connectAuthEmulator(getAuth(firebaseApp), 'http://localhost:9099');
   connectFunctionsEmulator(functions, 'localhost', 5001);
+  connectFirestoreEmulator(db, 'localhost', 8081 )
 }
 const auth = getAuth(firebaseApp)
+const submit = httpsCallable(functions, 'submitFeedback')
 const app = createApp(App)
+
 app.provide('$auth', auth)
-app.provide('$functions', functions)
+app.provide('$submit', submit)
+
 
 app.mount('#app')

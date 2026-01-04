@@ -1,10 +1,13 @@
 <script setup>
-import { shallowRef } from 'vue';
+import { shallowRef, ref } from 'vue';
 import WelcomeItem from './WelcomeItem.vue';
 import KudosForm from './KudosForm.vue';
 import ProblemForm from './ProblemForm.vue';
+import {getTeam} from './AppData.js';
+import TeamSelector from './TeamSelector.vue'
 
 const currentView = shallowRef(null);
+const team = ref(getTeam());
 
 const showKudosForm = () => {
   currentView.value = KudosForm;
@@ -12,13 +15,20 @@ const showKudosForm = () => {
 const showProblemForm = () => {
   currentView.value = ProblemForm;
 }
+
+const onTeamSelected = () => {
+  team.value = getTeam();
+}
 </script>
 
 <template>
 <component :is="currentView" v-if="currentView" />
 <div v-else>
   <h1>Welcome to Feedback Portal</h1>
-  <p>Choose an option below to get started:</p>
+  <div v-if="team">
+     Your Team: {{ team }}
+  </div>
+  <TeamSelector v-else @team-selected="onTeamSelected"></TeamSelector>
   <WelcomeItem @click="showKudosForm">
     <template #label>Give Kudos</template>
   </WelcomeItem>

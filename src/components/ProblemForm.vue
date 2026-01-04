@@ -1,18 +1,22 @@
 <template>
-  <div class="kudos-form">
-    <h2>Report a Problem</h2>
-    <form @submit.prevent="submit">
+  <div class="problem-form">
+    <h2>Give problem</h2>
+    <form @submit.prevent="submitproblem">
       <div class="form-group">
-        <label for="teamNumber">Your Team:</label>
-        <input id="teamNumber" type="number" maxlength="6">
+        <label for="session-id">DE Session</label>
+        <input id="session-id" type="text" v-model="sessionId">
       </div>
-      <div class="form-group">
-        <label for="sessionId">DE Session</label>
-        <input id="sessionId" type="">
+      <div>
+        <label for="topic">Category</label>
+        <select id="topic" v-model="topic" required>
+          <option value="">Choose one</option>
+          <option value="tbd">Load from backend</option>
+          <option value="other">other</option>
+        </select>
       </div>
       <div class="form-group">
         <label for="feedback">Details:</label>
-        <textarea id="feedback" v-model="kudosMessage" required></textarea>
+        <textarea id="feedback" v-model="problemMessage" required></textarea>
       </div>
       <button type="submit" class="submit-button">Submit</button>
       <button type="button" class="cancel-button" @click="cancelForm">Cancel</button>
@@ -21,38 +25,40 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, inject } from 'vue';
+import { getTeam } from './AppData'
 
-const kudosMessage = ref('');
+
+const problemMessage = ref('');
+const sessionId = ref('');
+const topic = ref('');
+const callable = inject('$submit');
 const emit = defineEmits(['submit', 'cancel']);
 
-const submit = async () => {
+const submitproblem = async () => {
   try {
-    const response = await fetch('https://your-project-id.cloudfunctions.net/submitKudos', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        message: kudosMessage.value
-       })
+    const result = await callable({
+      feedback: problemMessage.value,
+      teamNumber: getTeam().value,
+      sessionId: sessionId.value,
+      category: topic.value
     });
 
-    if (!response.ok) throw new Error('Network response was not ok');
-
-    emit('submit', kudosMessage.value);
-    kudosMessage.value = ''; // Clear the form after submission
+    emit('submit', result);
+    problemMessage.value = ''; // Clear the form after submission
   } catch (error) {
-    console.error('Error submitting kudos:', error);
+    console.error('Error submitting problem:', error.code, error.message);
   }
 };
 
 const cancelForm = () => {
   emit('cancel');
-  kudosMessage.value = ''; // Clear the form on cancel
+  problemMessage.value = ''; // Clear the form on cancel
 };
 </script>
 
 <style scoped>
-.kudos-form {
+.problem-form {
   background-color: var(--color-background-soft);
   padding: 2rem;
   border-radius: 8px;
@@ -84,6 +90,6 @@ textarea {
   border: 1px solid var(--color-border);
   border-radius: 4px;
   font-size: 1rem;
-  min-height: 120
+  min-height: 120px;
 }
 </style>
