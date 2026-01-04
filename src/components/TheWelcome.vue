@@ -22,7 +22,7 @@ const onTeamSelected = () => {
 </script>
 
 <template>
-<component :is="currentView" v-if="currentView" />
+<component :is="currentView" v-if="currentView" :team-number="team" @cancel="currentView = null" @submit="currentView = null" />
 <div v-else>
   <h1>Welcome to Feedback Portal</h1>
   <div v-if="team">

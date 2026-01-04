@@ -26,7 +26,6 @@
 
 <script setup>
 import { ref, inject } from 'vue';
-import { getTeam } from './AppData'
 
 
 const problemMessage = ref('');
@@ -34,12 +33,15 @@ const sessionId = ref('');
 const topic = ref('');
 const callable = inject('$submit');
 const emit = defineEmits(['submit', 'cancel']);
+const props = defineProps({
+  teamNumber: Number
+});
 
 const submitproblem = async () => {
   try {
     const result = await callable({
       feedback: problemMessage.value,
-      teamNumber: getTeam().value,
+      teamNumber: props.teamNumber,
       sessionId: sessionId.value,
       category: topic.value
     });
