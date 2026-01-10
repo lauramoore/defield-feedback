@@ -31,6 +31,7 @@ const app = createApp(App)
 
 app.provide('$auth', auth)
 app.provide('$submit', submit)
+app.provide('$db', db)
 
 
 app.mount('#app')
